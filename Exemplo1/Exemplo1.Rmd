@@ -1,0 +1,75 @@
+---
+title: "Exemplo 1"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(shiny)
+
+df <- iris
+```
+
+Columm {.sidebar}
+---------------------------
+
+```{r}
+selectInput(
+  inputId= "coluna",
+  label = "Escola a coluna",
+  choices = c('Sepal.Length', 'Sepal.Width', 'Petal.Length', 'Petal.Width'),
+  selected = "Sepal.Length"
+)
+```
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Boxplot
+
+```{r}
+renderPlot({
+df %>% 
+  ggplot() +
+  aes(y = !!sym(input$coluna), fill = Species) +
+  geom_boxplot() + 
+  theme(legend.position = "top")  
+})
+
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Histograma
+
+```{r}
+renderPlot({
+  df %>% 
+  ggplot() + 
+  aes(x = !!sym(input$coluna)) +
+  geom_histogram() + 
+  theme(legend.position = "top")
+})
+
+```
+
+### Sumário
+
+```{r}
+renderTable({
+  df %>% 
+  group_by(Species) %>% 
+  summarise(Média = mean(!!sym(input$coluna)),
+            Mediana = median(!!sym(input$coluna))) 
+})
+
+```
+

@@ -1,0 +1,75 @@
+---
+title: "Acões"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(tidyquant) # cotacoes
+#library(plotly) # graficos interativos
+#library(DT) # tabelas
+```
+
+```{r}
+prices <- c("VALE3","BRAP4","BTOW3","RENT3","GGBR4",
+    "NTCO3","CIEL33","SANB11","TOTS3","SULA11") %>% 
+  paste0(".Sa") %>% 
+  tq_get(get= "stock.prices", from = "2010-01-01") %>% 
+  mutate(symbol = sub(".SA","",symbol))
+```
+
+
+
+
+Column {.sidebar}
+--------------------
+
+```{r}
+selectInput(
+  "acao",
+  label = "Escolha sua ação",
+  choices = c(
+    "VALE3","BRAP4","BTOW3","RENT3","GGBR4",
+    "NTCO3","CIEL33","SANB11","TOTS3","SULA11"
+  )
+)
+selectInput(
+  "periodo", label = "Escolha o período",
+  choices = c("1M","6M","1A","10A")
+)
+```
+
+
+
+Row {data-width=500}
+-----------------------------------------------------------------------
+
+### Tendência
+
+```{r}
+
+```
+
+### Todas as tendências
+
+```{r}
+
+```
+
+
+Row {data-width=500}
+-----------------------------------------------------------------------
+
+### Cotações
+
+```{r}
+
+```
+
+
+
